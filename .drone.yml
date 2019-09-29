@@ -1,0 +1,31 @@
+---
+kind: pipeline
+type: exec
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+# on push code to master
+trigger:
+  branch:
+    - master
+  event:
+    - push
+
+clone:
+  depth: 10
+
+steps:
+  - name: build
+    commands:
+    - echo "do_build $GOOS"
+    environment:
+      GOOS: linux
+  - name: deploy
+    when:
+      status:
+        - success
+    commands:
+    - echo "do_deploy"
